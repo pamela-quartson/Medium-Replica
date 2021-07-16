@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::simplepaginate(3);
         return view('posts.posts', compact('posts'));
     }
 
@@ -39,14 +39,25 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //find out how to retrieve user's id
-        $post = new Post;
+        $validated = $request->validate([
+            'title'=>'required|string',
+            'content'=>'required|string',
+            'tags'=>'required|string',
+            'category'=>'required',
+            'image'=>'required|image|mimes:png,jpg,jpeg'
+        ]);
+
+        $arrtoStr = implode(',', $request->input('category'));
         $path = 'storage/' . $request->image->store('posts', 'public');
+
+        $post = new Post;
         $post->image = $path;
-        $post->title = $request->title;
-        $post->content = $request->content;
         $post->user_id = Auth::id();
         $post->tags = $request->tags;
+        $post->categories = $arrtoStr;
+        $post->title = $request->title;
+        $post->content = $request->content;
+        
         $post->save();
         return redirect('posts');
     }
@@ -59,8 +70,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
-        return view('posts.view', compact($post));
+        $post = Post::find($id);
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -116,5 +127,18 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $post->claps = $post->claps + 1;
         $post->save();
+    }
+
+
+    /**
+     * Display all posts of logged in user.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function currUserPosts()
+    {
+        $posts = Post::where('user_id', Auth::id())->simplepaginate(3);
+        return view('dashboard', compact('posts'));
+
     }
 }

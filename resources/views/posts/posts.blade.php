@@ -35,59 +35,23 @@
                 @foreach($posts as $post)
                     <!-- Post preview-->
                     <div class="post-preview">
-                        <a href="post.html">
+                        <a href="/posts/{{ $post->id }}">
                             <h2 class="post-title">{{ $post->title }}</h2>
                         </a>
                         <p class="post-meta">
                             Posted by
-                            <a href="#!">{{ $post->user->name }}</a>
-                            on {{ \Carbon\Carbon::parse($post->created_at)->format('M d Y')}}
+                            <a href="#!">{{ $post->author->name }}</a>
+                            {{ $post->created_at->diffForHumans()}}
                         </p>
                     </div>
                     <!-- Divider-->
                     <hr class="my-4" />
                 @endforeach
-
-                <!-- Post preview-->
-             <!--    <div class="post-preview">
-                    <a href="post.html"><h2 class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2></a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on September 18, 2021
-                    </p>
-                </div> -->
-                <!-- Divider-->
-                <!-- <hr class="my-4" /> -->
-                <!-- Post preview-->
-                <!-- <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Science has not yet mastered prophecy</h2>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on August 24, 2021
-                    </p>
-                </div> -->
-                <!-- Divider-->
-                <!-- <hr class="my-4" /> -->
-                <!-- Post preview-->
-               <!--  <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Failure is not an option</h2>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on July 8, 2021
-                    </p>
-                </div> -->
-                <!-- Divider-->
-                <!-- <hr class="my-4" /> -->
                 <!-- Pager-->
-                <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="/welcome">Older Posts →</a></div>
+                <!-- <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="/welcome">Older Posts →</a></div> -->
             </div>
+        {{ $posts->links() }}
+        <hr class="my-4" />
         </div>
     </div>
 </x-app-layout>
